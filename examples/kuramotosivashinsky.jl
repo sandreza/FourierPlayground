@@ -19,7 +19,7 @@ noise_const = 3e-2
 
 # experiment setup
 arraytype = Array
-L = 100.0 # 34 # 20π * sqrt(2) # 22
+L = 22.0 # domain size / "reynolds" number
 Ω = S¹(L)
 N = 2^8  # number of gridpoints
 
@@ -75,8 +75,8 @@ end
 P! * uⁿ
 
 # set up time stepping and data storage for plotting and disk storage
-substep = 10
-endtime = 200000
+substep = floor(Int, 0.2/Δt)
+endtime = 20000
 M = floor(Int, endtime / (substep * Δt))
 plotmat = zeros(N, M)
 save_N = 2 * 64
@@ -105,7 +105,7 @@ fig = Figure(resolution=(1000, 500))
 ax = Axis(fig[1, 1])
 ax_spec = Axis(fig[1, 2])
 ax_inst = Axis(fig[1, 3])
-contourf!(ax, plotmat[:, 1:10:10000])
+contourf!(ax, plotmat[:, 1:substep:10000])
 scatter!(ax_spec, log.(abs.(uⁿ) .+ eps(1.0)))
 lines!(ax_inst, plotmat[:, end])
 display(fig)
